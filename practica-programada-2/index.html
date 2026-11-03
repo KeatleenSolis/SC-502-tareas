@@ -1,0 +1,291 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica #2</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>Práctica #2</h1>
+        <p>Keatleen Solis González</p>
+    </header>
+
+    <main>
+
+        <!-- EJERCICIO 1 -->
+        <section>
+            <h2>Cálculo de Cargas Sociales</h2>
+
+            <label for="salario">Ingrese su salario bruto:</label>
+            <input type="number" id="salario"
+                   min="0" step="any" placeholder="Ejemplo: 500000">
+
+            <button type="button" onclick="calcularSalario()">
+                Calcular
+            </button>
+
+            <div id="resultadoSalario" class="resultado"></div>
+        </section>
+
+        <!-- EJERCICIO 2 -->
+        <section>
+            <h2>Manipulación del DOM</h2>
+
+            <p id="parrafo">Texto original del párrafo.</p>
+
+            <button type="button" onclick="cambiarTexto()">
+                Ver más
+            </button>
+        </section>
+
+        <!-- EJERCICIO 3 -->
+        <section>
+            <h2>Estructura de Control de Flujo</h2>
+
+            <label for="edad">Ingrese su edad:</label>
+            <input type="number" id="edad"
+                   min="0" step="1" placeholder="Escriba su edad">
+
+            <button type="button" onclick="evaluarEdad()">
+                Aceptar
+            </button>
+
+            <p id="resultadoEdad" class="resultado"></p>
+        </section>
+
+        <!-- EJERCICIO 4 -->
+        <section>
+            <h2>Manipulación de Arreglos</h2>
+
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" placeholder="Ingrese el nombre">
+
+            <label for="apellido">Apellidos:</label>
+            <input type="text" id="apellido" placeholder="Ingrese el apellido">
+
+            <label for="nota">Nota:</label>
+            <input type="number" id="nota" min="0" max="100"
+                   step="any" placeholder="Ingrese la nota">
+
+            <button type="button" onclick="agregarEstudiante()">
+                Agregar estudiante
+            </button>
+
+            <h3>Lista de estudiantes registrados</h3>
+            <div id="listaEstudiantes"></div>
+
+            <button type="button" onclick="calcularPromedio()">
+                Calcular promedio
+            </button>
+
+            <p id="promedio" class="resultado"></p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>© 2026 Mi Sitio Web. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- JAVASCRIPT-->
+    <script>
+
+        // ==========================================
+        // CARGAS SOCIALES
+        // ==========================================
+
+        function calcularSalario() {
+
+            let entrada = document.getElementById("salario");
+            let resultado = document.getElementById("resultadoSalario");
+            let salario = Number(entrada.value);
+
+            if (entrada.value.trim() === "" ||
+                !Number.isFinite(salario) || salario <= 0) {
+
+                resultado.textContent =
+                    "Ingrese un salario mayor que cero.";
+                return;
+            }
+
+            let cargasSociales = salario * 0.1067;
+            let impuesto = calcularImpuesto(salario);
+            let salarioNeto = salario - cargasSociales - impuesto;
+
+            resultado.innerHTML = `
+                <p>Cargas sociales: ${formatearColones(cargasSociales)}</p>
+                <p>Impuesto sobre la renta: ${formatearColones(impuesto)}</p>
+                <p><strong>Salario neto: ${formatearColones(salarioNeto)}</strong></p>
+            `;
+        }
+
+
+        function calcularImpuesto(salario) {
+
+            let impuesto = 0;
+
+            if (salario > 918000) {
+                impuesto +=
+                    (Math.min(salario, 1347000) - 918000) * 0.10;
+            }
+
+            if (salario > 1347000) {
+                impuesto +=
+                    (Math.min(salario, 2364000) - 1347000) * 0.15;
+            }
+
+            if (salario > 2364000) {
+                impuesto +=
+                    (Math.min(salario, 4727000) - 2364000) * 0.20;
+            }
+
+            if (salario > 4727000) {
+                impuesto += (salario - 4727000) * 0.25;
+            }
+
+            return impuesto;
+        }
+
+
+        function formatearColones(monto) {
+
+            return monto.toLocaleString("es-CR", {
+                style: "currency",
+                currency: "CRC"
+            });
+        }
+
+
+        // ==========================================
+        // MANIPULACION DEL DOM
+        // ==========================================
+
+        function cambiarTexto() {
+
+            document.getElementById("parrafo").textContent =
+                "¡El texto del parrafo ha cambiado correctamente!";
+        }
+
+
+        // ==========================================
+        // CONDICIONALES
+        // ==========================================
+
+        function evaluarEdad() {
+
+            let entrada = document.getElementById("edad");
+            let resultado = document.getElementById("resultadoEdad");
+            let edad = Number(entrada.value);
+
+            if (entrada.value.trim() === "" ||
+                !Number.isInteger(edad) || edad < 0) {
+
+                resultado.textContent = "Ingrese una edad válida.";
+                return;
+            }
+
+            if (edad >= 18) {
+                resultado.textContent = "Usted es mayor de edad.";
+            } else {
+                resultado.textContent = "Usted es menor de edad.";
+            }
+        }
+
+
+        // ==========================================
+        // ARREGLOS
+        // ==========================================
+
+        let estudiantes = [];
+
+
+        function agregarEstudiante() {
+
+            let nombre = document.getElementById("nombre").value.trim();
+            let apellido = document.getElementById("apellido").value.trim();
+            let notaTexto = document.getElementById("nota").value;
+            let nota = Number(notaTexto);
+
+            if (nombre === "" || apellido === "" ||
+                notaTexto.trim() === "") {
+
+                alert("Complete el nombre, apellido y nota.");
+                return;
+            }
+
+            if (!Number.isFinite(nota) || nota < 0 || nota > 100) {
+
+                alert("La nota debe estar entre 0 y 100.");
+                return;
+            }
+
+            let estudiante = {
+                nombre: nombre,
+                apellido: apellido,
+                nota: nota
+            };
+
+            estudiantes.push(estudiante);
+
+            mostrarEstudiantes();
+
+            document.getElementById("nombre").value = "";
+            document.getElementById("apellido").value = "";
+            document.getElementById("nota").value = "";
+
+            document.getElementById("promedio").textContent = "";
+        }
+
+
+        function mostrarEstudiantes() {
+
+            let lista = document.getElementById("listaEstudiantes");
+            lista.innerHTML = "";
+
+            estudiantes.forEach(function(estudiante) {
+
+                let elemento = document.createElement("div");
+                elemento.className = "estudiante";
+
+                elemento.textContent =
+                    estudiante.nombre + " " +
+                    estudiante.apellido + " - Nota: " +
+                    estudiante.nota;
+
+                lista.appendChild(elemento);
+            });
+        }
+
+
+        function calcularPromedio() {
+
+            let resultado = document.getElementById("promedio");
+
+            if (estudiantes.length === 0) {
+                resultado.textContent = "Agregue al menos un estudiante.";
+                return;
+            }
+
+            let sumaNotas = 0;
+
+            estudiantes.forEach(function(estudiante) {
+                sumaNotas += estudiante.nota;
+            });
+
+            let promedio = sumaNotas / estudiantes.length;
+
+            resultado.textContent =
+                "Promedio de las notas: " + promedio.toFixed(2);
+        }
+
+    </script>
+
+</body>
+</html>

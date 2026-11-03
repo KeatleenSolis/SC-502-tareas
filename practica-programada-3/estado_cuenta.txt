@@ -1,0 +1,15 @@
+ESTADO DE CUENTA - TARJETA DE CRÉDITO
+Fecha de generación: 02/11/2026 21:48
+============================================================
+ID    Descripción                       Monto
+------------------------------------------------------------
+1     Super cartago                     ₡45,000.00
+2     Bomba Uno                         ₡30,000.00
+3     La casona                         ₡18,500.00
+4     La bomba                          ₡12,750.00
+5     Suscripción Spotify               ₡6,500.00
+============================================================
+Monto total de contado:                 ₡112,750.00
+Monto total con interés (2.6%):         ₡115,681.50
+Cash back (0.1%):                       -₡112.75
+Monto final a pagar:                    ₡115,568.75
